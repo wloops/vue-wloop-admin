@@ -36,13 +36,13 @@ const formSchema = computed((): VbenFormSchema[] => {
         options: MOCK_USER_OPTIONS,
         placeholder: $t('authentication.selectAccount'),
       },
-      fieldName: 'selectAccount',
+      fieldName: 'keySvrName',
       label: $t('authentication.selectAccount'),
       rules: z
         .string()
         .min(1, { message: $t('authentication.selectAccount') })
         .optional()
-        .default('vben'),
+        .default('DEV_172_17_3_26_19092'),
     },
     {
       component: 'VbenInput',
@@ -57,15 +57,17 @@ const formSchema = computed((): VbenFormSchema[] => {
             );
             if (findUser) {
               form.setValues({
-                password: '123456',
-                username: findUser.value,
+                password:
+                  'bbf487eb6bc46a3c5e73c5719c7e20f9c952f5073dad169e517b78a346814c790265be90593fde02cd3d5963dec1cdd540c59d7e27319dda87a17e8a1e3fd7b02d741ede190f8ed41674ba000cb139b4d9a1c4a0dec4cf921c276e6c498ccfd7aa31ff7f5c76f41850f7e640c010bdcd54917b18000ab54e930acd48d06536a3',
+                userID: findUser.value,
+                keySvrName: 'DEV_172_17_3_26_19092',
               });
             }
           }
         },
         triggerFields: ['selectAccount'],
       },
-      fieldName: 'username',
+      fieldName: 'userID',
       label: $t('authentication.username'),
       rules: z.string().min(1, { message: $t('authentication.usernameTip') }),
     },

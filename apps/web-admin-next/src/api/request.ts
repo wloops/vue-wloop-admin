@@ -1,7 +1,7 @@
 /**
  * 该文件可自行根据业务逻辑进行调整
  */
-import type { HttpResponse } from '@vben/request';
+// import type { HttpResponse } from '@vben/request'
 
 import { useAppConfig } from '@vben/hooks';
 import { preferences } from '@vben/preferences';
@@ -65,21 +65,36 @@ function createRequestClient(baseURL: string) {
 
       config.headers.Authorization = formatToken(accessStore.accessToken);
       config.headers['Accept-Language'] = preferences.app.locale;
+      // post 默认x-www-form-urlencoded
+      config.headers['content-type'] = 'application/x-www-form-urlencoded';
       return config;
     },
   });
 
+  // // response数据解构
+  // client.addResponseInterceptor<HttpResponse>({
+  //   fulfilled: (response) => {
+  //     const { data: responseData, status } = response;
+
+  //     const { code, data } = responseData;
+  //     if (status >= 200 && status < 400 && code === 0) {
+  //       return data;
+  //     }
+
+  //     throw Object.assign({}, response, { response });
+  //   },
+  // });
   // response数据解构
-  client.addResponseInterceptor<HttpResponse>({
+  client.addResponseInterceptor<any>({
     fulfilled: (response) => {
       const { data: responseData, status } = response;
-
-      const { code, data } = responseData;
+      const code = 0;
+      // const { code, data, message: msg } = responseData;
+      const { message: msg } = responseData;
       if (status >= 200 && status < 400 && code === 0) {
-        return data;
+        return responseData;
       }
-
-      throw Object.assign({}, response, { response });
+      throw new Error(`Error ${status}: ${msg}`);
     },
   });
 

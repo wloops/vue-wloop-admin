@@ -3,13 +3,20 @@ import { baseRequestClient, requestClient } from '#/api/request';
 export namespace AuthApi {
   /** 登录接口参数 */
   export interface LoginParams {
-    password?: string;
-    username?: string;
+    password: string;
+    userID: string;
+    keySvrName: string;
+  }
+  /** 退出登录接口参数 */
+  export interface LogoutParams {
+    SYSTEMKEYNAME: string;
+    SYSTEMTELLERNO: string;
+    isBrowserClose: string;
   }
 
   /** 登录接口返回值 */
   export interface LoginResult {
-    accessToken: string;
+    accessToken: Object;
   }
 
   export interface RefreshTokenResult {
@@ -22,7 +29,7 @@ export namespace AuthApi {
  * 登录
  */
 export async function loginApi(data: AuthApi.LoginParams) {
-  return requestClient.post<AuthApi.LoginResult>('/auth/login', data);
+  return requestClient.post<AuthApi.LoginResult>('/loginEvlation', data);
 }
 
 /**
@@ -37,10 +44,11 @@ export async function refreshTokenApi() {
 /**
  * 退出登录
  */
-export async function logoutApi() {
-  return baseRequestClient.post('/auth/logout', {
-    withCredentials: true,
-  });
+export async function logoutApi(params: AuthApi.LogoutParams) {
+  return requestClient.post<any>('/logout', params);
+  // return baseRequestClient.post('/auth/logout', {
+  //   withCredentials: true,
+  // });
 }
 
 /**
