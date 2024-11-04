@@ -21,10 +21,6 @@
       "path": "apps/web-naive",
     },
     {
-      "name": "@vben/web-workflow",
-      "path": "apps/web-workflow",
-    },
-    {
       "name": "@vben/docs",
       "path": "docs",
     },

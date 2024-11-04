@@ -11,7 +11,7 @@ import { notification } from 'ant-design-vue';
 import { defineStore } from 'pinia';
 
 // import { getAccessCodesApi, getUserInfoApi, loginApi, logoutApi } from '#/api';
-import { getUserInfoApi, loginApi, logoutApi, type AuthApi } from '#/api';
+import { type AuthApi, getUserInfoApi, loginApi, logoutApi } from '#/api';
 import { $t } from '#/locales';
 
 export const useAuthStore = defineStore('auth', () => {
@@ -39,7 +39,7 @@ export const useAuthStore = defineStore('auth', () => {
       const accessToken =
         loginUserInfo.accessToken ||
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MCwicGFzc3dvcmQiOiIxMjM0NTYiLCJyZWFsTmFtZSI6IlZiZW4iLCJyb2xlcyI6WyJzdXBlciJdLCJ1c2VybmFtZSI6InZiZW4iLCJpYXQiOjE3MjgzMTQxOTEsImV4cCI6MTcyODkxODk5MX0.6V5RfWNjIyFOuvsAP2ezeC8WMc3abM_gLHaZvFXXsOE';
-      console.log('loginUserInfo', loginUserInfo);
+      // console.log('loginUserInfo', loginUserInfo);
       // 如果成功获取到 loginUserInfo
       if (loginUserInfo) {
         sessionStorage.setItem('loginUserInfo', JSON.stringify(loginUserInfo));
@@ -52,7 +52,7 @@ export const useAuthStore = defineStore('auth', () => {
         // ]);
 
         // userInfo = fetchUserInfoResult;
-        let userAny: any = {
+        const userAny: any = {
           id: 0,
           realName: loginUserInfo.name,
           roles: ['super'],
