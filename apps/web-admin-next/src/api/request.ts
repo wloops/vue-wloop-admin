@@ -62,11 +62,17 @@ function createRequestClient(baseURL: string) {
   client.addRequestInterceptor({
     fulfilled: async (config) => {
       const accessStore = useAccessStore();
-
       config.headers.Authorization = formatToken(accessStore.accessToken);
       config.headers['Accept-Language'] = preferences.app.locale;
       // post 默认x-www-form-urlencoded
       config.headers['content-type'] = 'application/x-www-form-urlencoded';
+
+      let loginUserInfo: any = sessionStorage.getItem('loginUserInfo');
+      if (loginUserInfo && config.data) {
+        loginUserInfo = JSON.parse(loginUserInfo);
+        config.data.SYSTEMKEYNAME = loginUserInfo.SYSTEMKEYNAME;
+        config.data.SYSTEMTELLERNO = loginUserInfo.SYSTEMTELLERNO;
+      }
       return config;
     },
   });
@@ -91,6 +97,10 @@ function createRequestClient(baseURL: string) {
       const code = 0;
       // const { code, data, message: msg } = responseData;
       const { message: msg } = responseData;
+      if (responseData.statusCode && responseData.statusCode === 301) {
+        doReAuthenticate();
+        throw new Error(`Error ${status}: ${msg}`);
+      }
       if (status >= 200 && status < 400 && code === 0) {
         return responseData;
       }
@@ -115,7 +125,10 @@ function createRequestClient(baseURL: string) {
       // 这里可以根据业务进行定制,你可以拿到 error 内的信息进行定制化处理，根据不同的 code 做不同的提示，而不是直接使用 message.error 提示 msg
       // 当前mock接口返回的错误字段是 error 或者 message
       const responseData = error?.response?.data ?? {};
-      const errorMessage = responseData?.error ?? responseData?.message ?? '';
+      let errorMessage = responseData?.error ?? responseData?.message ?? '';
+      if (error) {
+        errorMessage = error.toString().split(':')[2];
+      }
       // 如果没有错误信息，则会根据状态码进行提示
       message.error(errorMessage || msg);
     }),
