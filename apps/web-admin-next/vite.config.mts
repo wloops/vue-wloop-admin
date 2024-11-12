@@ -11,7 +11,7 @@ export default defineConfig(async () => {
             rewrite: (path) => path.replace(/^\/api/, ''),
             // mock代理目标地址
             // target: 'http://localhost:5320/api',
-            target: 'http://work.paytunnel.cn:18800/gms-dev-api/',
+            target: 'http://172.17.3.26:8800/gms-dev-api/',
             ws: true,
           },
         },

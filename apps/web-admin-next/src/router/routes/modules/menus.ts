@@ -115,7 +115,7 @@ export function useMenu() {
   const getFullMenu = async () => {
     const firstLevelMenu = await getMenuGroup();
     console.log('firstLevelMenu', firstLevelMenu);
-    if (!firstLevelMenu) {
+    if (!firstLevelMenu || !Array.isArray(firstLevelMenu)) {
       return [];
     }
     fullMenu = firstLevelMenu;
